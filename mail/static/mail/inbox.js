@@ -61,7 +61,7 @@ function load_mailbox(mailbox) {
   // Show the mailbox name
   document.querySelector('#emails-view').innerHTML = `<h3>${mailbox.charAt(0).toUpperCase() + mailbox.slice(1)}</h3>`;
 
-  //MY PART START
+  //MY WORK STARTS
   let inboxContainer=document.createElement("div")
   inboxContainer.className="inbox-container"
 
@@ -71,7 +71,7 @@ function load_mailbox(mailbox) {
   .then(response=>response.json())
   .then(emails=>{
    // alert('fetch emails got triggered')
-   //for loop
+   // for loop
    emails.forEach(email=>{
       
       let div=document.createElement('div')
@@ -99,8 +99,8 @@ function load_mailbox(mailbox) {
                })
             })  
             const reply_to_email =(received_email)=>{
-               alert('reply_to_email got triggered')
-               console.log('reply to email::',received_email)
+               // alert('reply_to_email got triggered')
+               // console.log('reply to email::',received_email)
                compose_email()
                   document.querySelector('#email-view').style.display = 'none';
                   document.querySelector('#compose-view').style.display = 'block';
@@ -115,16 +115,15 @@ function load_mailbox(mailbox) {
                   let prefilled_text=`On ${received_email.timestamp} [${received_email.sender}] wrote: ${received_email.body}`
                  
                   let composeBody=document.querySelector("#compose-body")
-                  composeBody.value=`${prefilled_text}\n\t${composeBody.value}-------------------------------------------------------\n\n`
-                  console.log(composeBody.value)              
-               
+                  composeBody.value=`${prefilled_text}\n\t${composeBody.value}-----\n`
+                  console.log(composeBody.value) 
             } 
             //show email
             document.querySelector("#email-view").style.display = "block";
             document.querySelector("#emails-view").style.display = "none";
             let emailDiv=document.createElement("div")
                emailDiv.className="email-div"
-               // emailDiv.innerHTML=`HELLO WORLD! ${email.sender} - ${email.body}`
+              
                const p1 = document.createElement("p");
                const p2 = document.createElement("p");
                const p3 = document.createElement("p");
@@ -137,12 +136,12 @@ function load_mailbox(mailbox) {
                p3.innerHTML = `<strong>Timestamp: </strong>${email.timestamp}`;
                p4.innerHTML = `<strong>Subject: </strong>${email.subject}`;
                button3.innerHTML = `Reply`; 
+               button3.className="btn btn-sm btn-primary"
 
                button3.addEventListener('click',()=>{
-                  // TODO: REPLY THE EMAIL, CAREFUL
+                  // TODO: REPLY THE EMAIL
                   reply_to_email(email)
-                  // alert('after compose_email() called')
-                  
+                  // alert('after compose_email() called')                  
                })
                body.innerHTML = `${email.body}`;
 
@@ -178,10 +177,7 @@ function load_mailbox(mailbox) {
       div.appendChild(emailContent)
 
       const setArchive =(email)=>{
-         // document.querySelector("#email-view").innerHTML=''
-         // setArchive(email)    
-         // alert('archive btn click even got triggered')
-         // console.log('archive btn click with email::',email)
+        
          fetch(`/emails/${email.id}`,{
             method:"PUT",
             headers:{
@@ -205,8 +201,7 @@ function load_mailbox(mailbox) {
          archiveButton.addEventListener('click',()=>setArchive(email))
       }
       const setUnarchive =(email)=>{
-         // alert('unarchive btn got trigged')
-         // console.log('email unarchive::',email)
+         
          fetch(`/emails/${email.id}`,{
             method:"PUT",
             headers:{
@@ -229,11 +224,9 @@ function load_mailbox(mailbox) {
          
          unArchiveButton.addEventListener('click',()=>setUnarchive(email))      
       }
-      inboxContainer.appendChild(div)  
-      
+      inboxContainer.appendChild(div)        
   //end for loop
-   })
-  
+   })  
    
   })
 //   inboxContainer.appendChild(archiveButton)
