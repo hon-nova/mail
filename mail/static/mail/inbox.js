@@ -97,7 +97,28 @@ function load_mailbox(mailbox) {
                body:JSON.stringify({
                   read:true
                })
-            })   
+            })  
+            const reply_to_email =(received_email)=>{
+               alert('reply_to_email got triggered')
+               console.log('reply to email::',received_email)
+               compose_email()
+                  document.querySelector('#email-view').style.display = 'none';
+                  document.querySelector('#compose-view').style.display = 'block';
+              
+                  document.querySelector("#compose-recipients").value=received_email.recipients
+                  console.log(document.querySelector("#compose-recipients").value)
+ 
+                  document.querySelector("#compose-subject").value=received_email.subject.startsWith('Re: ')? received_email.subject : `Re: ${received_email.subject}`
+
+                  console.log('subject::',document.querySelector("#compose-subject").value)
+
+                  let prefilled_text=`On ${received_email.timestamp} [${received_email.sender}] wrote: ${received_email.body}`
+                 
+                  let composeBody=document.querySelector("#compose-body")
+                  composeBody.value=`${prefilled_text}\n\t${composeBody.value}-------------------------------------------------------\n\n`
+                  console.log(composeBody.value)              
+               
+            } 
             //show email
             document.querySelector("#email-view").style.display = "block";
             document.querySelector("#emails-view").style.display = "none";
@@ -119,23 +140,7 @@ function load_mailbox(mailbox) {
 
                button3.addEventListener('click',()=>{
                   // TODO: REPLY THE EMAIL, CAREFUL
-                  console.log('email received::',received_email)
-                  document.querySelector('#email-view').style.display = 'none';
-                  document.querySelector('#compose-view').style.display = 'block';
-              
-                  document.querySelector("#compose-recipients").value=received_email.recipients
-                  console.log(document.querySelector("#compose-recipients").value)
- 
-                  document.querySelector("#compose-subject").value=received_email.subject.startsWith('Re: ')? received_email.subject : `Re: ${received_email.subject}`
-
-                  console.log('subject::',document.querySelector("#compose-subject").value)
-
-                  let prefilled_text=`On ${received_email.timestamp} [${received_email.sender}] wrote: ${received_email.body}`
-                 
-                  let composeBody=document.querySelector("#compose-body")
-                  composeBody.value=`${prefilled_text}\n\n${composeBody.value}`
-                  console.log(composeBody.value)                  
-                  compose_email()
+                  reply_to_email(email)
                   // alert('after compose_email() called')
                   
                })
